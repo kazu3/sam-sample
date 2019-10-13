@@ -6,6 +6,10 @@ Globals:
     Runtime: python3.6
     Timeout: 15
     MemorySize: 256
+    Environment:
+      Variables:
+        TABLE_NAME:
+          Ref: ondemanddb
 Resources:
   SamSampleLambda:
     Type: AWS::Serverless::Function
@@ -18,3 +22,14 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: rate(5 minutes)
+  ondemanddb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ondemand_sam_test
+      AttributeDefinitions:
+      - AttributeName: name
+        AttributeType: S
+      KeySchema:
+      - AttributeName: name
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
