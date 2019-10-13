@@ -1,28 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Create Lambda function by using AWS SAM.
-
 Globals:
   Function:
     Runtime: python3.6
     Timeout: 15
     MemorySize: 256
-    # Environment:
-    #   Variables:
-    #     DYNAMODB_TABLE: data-table
-
 Resources:
   SamSampleLambda:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda-function.lambda-handler
-      CodeUri: 'functions/sample_function/lambda_function.zip'
+      CodeUri: s3://kazu3-sam-sample/cdbe93f1a2c7d6675901f99b33b3fceb
       Role: arn:aws:iam::376980248727:role/lambda-dynamo
       Events:
         Timer:
           Type: Schedule
           Properties:
             Schedule: rate(5 minutes)
-            #Schedule: cron(0 * * * ? *)
-
-
