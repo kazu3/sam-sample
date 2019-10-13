@@ -7,9 +7,9 @@ Globals:
     Runtime: python3.6
     Timeout: 15
     MemorySize: 256
-    # Environment:
-    #   Variables:
-    #     DYNAMODB_TABLE: data-table
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ondemanddb
 
 Resources:
   SamSampleLambda:
@@ -24,5 +24,26 @@ Resources:
           Properties:
             Schedule: rate(5 minutes)
             #Schedule: cron(0 * * * ? *)
+  # SamSampleDynamoTable:
+  #   Type: AWS::Serverless::SimpleTable
+  #   Properties:
+  #     PrimaryKey:
+  #       Name: name
+  #       Type: String
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 2
+  #       WriteCapacityUnits: 2
+      # BillingMode: PAY_PER_REQUEST # On-Demand用設定値
 
-
+  ondemanddb:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: ondemand_sam_test
+      AttributeDefinitions:
+        - AttributeName: name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: name
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST # On-Demand用設定値
+      
